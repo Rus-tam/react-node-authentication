@@ -20,6 +20,13 @@ class UserController {
     }
   }
 
+  async activate(req, res, next) {
+    try {
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async refresh(req, res, next) {
     try {
     } catch (e) {
@@ -29,6 +36,7 @@ class UserController {
 
   async getUsers(req, res, next) {
     try {
+      res.json(["123", "321"]);
     } catch (e) {
       console.log(e);
     }
