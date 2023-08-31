@@ -15,7 +15,7 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4();
     const user = await User.create({ email, password: hashPassword, activationLink });
-    await mailService.sendActivationMail(email, activationLink);
+    await mailService.sendActivationMail(email, `${process.env.APi_URL}/api/activate/${activationLink}`);
 
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
