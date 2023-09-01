@@ -1,8 +1,14 @@
 import userService from "../service/user-service.js";
+import { validationResult } from "express-validator";
+import { ApiErrors } from "../exceptions/api-errors.js";
 
 class UserController {
   async registration(req, res, next) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiErrors.BadRequest("Ошибка при валидации", errors.array()));
+      }
       const { email, password } = req.body;
       const userData = await userService.registration(email, password);
 
@@ -15,6 +21,10 @@ class UserController {
 
   async login(req, res, next) {
     try {
+      const { email, password } = req.body;
+      const userData = await userService.login(email, password);
+      res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+      return res.json(userData);
     } catch (e) {
       next(e);
     }
