@@ -9,6 +9,7 @@ import { ApiErrors } from "../exceptions/api-errors.js";
 class UserService {
   async registration(email, password) {
     const candidate = await User.findOne({ email });
+    console.log("CANDIDATE", candidate);
 
     if (candidate) {
       throw ApiErrors.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`);
@@ -74,6 +75,11 @@ class UserService {
 
     await tokenService.saveToken(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
+  }
+
+  async getAllUsers() {
+    const users = await User.findAll();
+    return users;
   }
 }
 
